@@ -20,13 +20,13 @@ import com.ds.project01.dto.UserDto;
 @Controller
 public class UserController {
 
-	@GetMapping("/pt/write")
+	@GetMapping("/pt/write") //회원가입페이지
 	public String pt_write() {
 		
 		return "redirect:http://localhost:8081/bt/write";
 	}
 	
-	@GetMapping("/user/write")
+	@GetMapping("/user/write") // BT에서 받은 부서종류 취미종류 데이터로 가입페이지 출력
 	public String user_write(Model model, DeptDto deptList, HobbyDto hobbyList) {
 		model.addAttribute("deptList",deptList);
 		model.addAttribute("hobbyList",hobbyList);
