@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.ds.project01.domain.UserEntity;
 import com.ds.project01.dto.HobbyDataDto;
 import com.ds.project01.dto.UserDto;
 import com.ds.project01.service.PT_UserService;
@@ -56,13 +57,15 @@ public class PT_UserController {
 		for (int i = 0; i < service.HobbyDataView(userId).size(); i++) {
 			map.put("userHobbyChoice"+i, service.HobbyDataView(userId).get(i).getHobbyEntity().getHobbyCd()); //각각 여러 취미데이터를 다른 아이디로 저장
 		}
-		map.put("deptList", service.deptList()); //받아온 부서 데이터 저장 후 script에서 불러낼것
-		map.put("getUerId",service.view(userId).getUserId());
-		map.put("getUserNm",service.view(userId).getUserNm());
-		map.put("getUserEmlAddr",service.view(userId).getUserEmlAddr());
-		map.put("getUserTelno",service.view(userId).getUserTelno());
-		map.put("getUserDeptNo",service.view(userId).getDeptEntity().getDeptNo());
-		map.put("getUserAprvYn",service.view(userId).getUserAprvYn());
+		UserEntity entity = new UserEntity();
+		entity = service.view(userId);
+		
+		map.put("getUerId",entity.getUserId());
+		map.put("getUserNm",entity.getUserNm());
+		map.put("getUserEmlAddr",entity.getUserEmlAddr());
+		map.put("getUserTelno",entity.getUserTelno());
+		map.put("getUserDeptNo",entity.getDeptEntity().getDeptNo());
+		map.put("getUserAprvYn",entity.getUserAprvYn());
 		
 		return map;
 	}
