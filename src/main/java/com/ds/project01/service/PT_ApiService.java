@@ -21,7 +21,7 @@ import com.ds.project01.dto.UserDto;
 public class PT_ApiService {
 	
 	RestTemplate restTemplate = new RestTemplate();
-	String btUrl = "http://localhost:8081";
+	String btUrl = "http://34.125.203.235:8081";
 	
 	
 	public List<UserEntity> adminList(String searchKeyword){
