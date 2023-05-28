@@ -34,4 +34,4 @@ dependencies {
 tasks.named('test') {
 	useJUnitPlatform()
 }
-bootBuildImage { imageName = "PT" }
+bootBuildImage { imageName = "dsproject_pt" }
