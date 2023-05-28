@@ -20,9 +20,10 @@
      	<div class="row mb-5 align-items-end  justify-content-center">
    	       <div class="col-md-6" data-aos="fade-up">
 			<form name="userForm" id="userForm" action="/user/save" method="post">
-			<div class="form-group">
+			<div class="form-group ">
 				<label for="user_id">ID</label><br>
-				<input type="text" class="form-control" name="userId">
+				<input type="text" class="form-control " name="userId" id="userId">
+				<button type="button" class="btn btn-primary col-md-12" id="idCheck" >ID중복확인</button>
 			</div>
 			<div class="form-group">
 				<label for="user_nm">사원명</label>
@@ -67,3 +68,29 @@
 
 </body>
 </html>
+<script th:inline="javascript">
+$(()=>{
+	
+	$("#idCheck").click(()=>{
+		var userId = $("#userId").val();
+		$.ajax({
+			url:"/user/idcheck",
+			data:{
+				"userId":userId
+			},
+			type:"get"
+		})
+		.done((res)=>{
+			if(res.result==false){
+			alert("사용가능한 아이디입니다.")
+				$('#userId').prop("readOnly", true);
+			}
+			else
+			alert("이미 사용중인 아이디입니다.")
+		})
+		.fail((res, error, status)=>{
+			console.log(error)
+		})
+	})
+})
+</script>

@@ -18,7 +18,7 @@ import com.ds.project01.dto.UserDto;
 
 
 @Service
-public class PT_UserService { //해놓고 보니 서비스를 유저, 취미 등으로 안나눴음
+public class PT_ApiService {
 	
 	RestTemplate restTemplate = new RestTemplate();
 	String btUrl = "http://localhost:8081";
@@ -47,6 +47,7 @@ public class PT_UserService { //해놓고 보니 서비스를 유저, 취미 등
 	}
 	public void delete(UserDto dto) {
 		String url = btUrl + "/bt/delete";
+		System.out.println(dto);
 		restTemplate.postForObject(url, dto, UserDto.class);
 	}
 	
@@ -58,6 +59,13 @@ public class PT_UserService { //해놓고 보니 서비스를 유저, 취미 등
 		return response.getBody();
 	}
 	
+	public Boolean idCheck(String userId) {
+		String url = btUrl + "/bt/idCheck?userId="+userId;
+		ResponseEntity<Boolean> response= restTemplate.exchange(url, HttpMethod.GET, null, 
+				new ParameterizedTypeReference<Boolean>() {});
+		return response.getBody();
+	}
+	
 	public List<DeptEntity> deptList(){
 		String url = btUrl + "/bt/deptList";
 		ResponseEntity<List<DeptEntity>> response= restTemplate.exchange(url, HttpMethod.GET, null, 
@@ -65,7 +73,7 @@ public class PT_UserService { //해놓고 보니 서비스를 유저, 취미 등
 		
 		return response.getBody();
 	}
-//	
+	
 	public List<HobbyEntity> hobbyList(){
 		String url = btUrl + "/bt/hobbyList";
 		ResponseEntity<List<HobbyEntity>> response= restTemplate.exchange(url, HttpMethod.GET, null, 
@@ -81,4 +89,5 @@ public class PT_UserService { //해놓고 보니 서비스를 유저, 취미 등
 		
 		return response.getBody();
 	}
+	
 }
