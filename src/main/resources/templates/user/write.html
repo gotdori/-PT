@@ -1,71 +1,115 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layouts/layout1}">
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layouts/layout1}">
 <head>
-	<title></title>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<title>join</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
+<style>
+.fieldError {
+	border-color: red;
+}
+</style>
 <body>
 	<div class="container" style="margin-top: 30px">
-      <div class="row mb-5 align-items-end  justify-content-center">
-       <div class="col-md-6" data-aos="fade-up">
-     	<a href="/">홈</a>
-		<h1>사용자 등록</h1>
+		<div class="row mb-5 align-items-end justify-content-center">
+			<div class="col-md-6" data-aos="fade-up">
+				<a href="/">홈</a>
+				<h1>사용자 등록</h1>
+			</div>
 		</div>
+
+		<div class="row mb-5 align-items-end justify-content-center">
+			<div class="col-md-6" data-aos="fade-up">
+				<form name="userForm" id="userForm" th:action="@{/user}"
+					th:object="${userDto}" method="post">
+					<div class="form-row">
+						<div class="col">
+							<label for="userId">아이디 *</label><br> <input type="text"
+								class="form-control" th:field="*{userId}"
+								th:class="${#fields.hasErrors('userId')}? 'form-control fieldError' : 'form-control'">
+							<p th:if="${#fields.hasErrors('userId')}" th:errors="*{userId}">Incorrect
+								data</p>
+						</div>
+						<div class="col-auto">
+							<label style="visibility: hidden;">ID 확인</label><br>
+							<button type="button" class="btn btn-primary" id="idCheck">ID
+								중복확인</button>
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="userPw">PW *</label> <input type="password"
+							class="form-control" th:field="*{userPw}"
+							th:class="${#fields.hasErrors('userPw')}? 'form-control fieldError' : 'form-control'"
+							placeholder="비밀번호는 8자 이상, 20자 이하로 입력해주세요.">
+						<div th:if="${#fields.hasErrors('userPw')}" th:errors="*{userPw}"
+							class="alert alert-danger"></div>
+					</div>
+					<div class="form-group">
+						<label for="userNm">사원명 *</label> <input type="text"
+							class="form-control" th:field="*{userNm}"
+							th:class="${#fields.hasErrors('userNm')}? 'form-control fieldError' : 'form-control'">
+						<div th:if="${#fields.hasErrors('userNm')}" th:errors="*{userNm}"
+							class="alert alert-danger"></div>
+					</div>
+					<div class="form-group">
+						<label for="userEmlAddr">e-mail *</label> <input type="email"
+							class="form-control" th:field="*{userEmlAddr}"
+							th:class="${#fields.hasErrors('userEmlAddr')}? 'form-control fieldError' : 'form-control'">
+						<div th:if="${#fields.hasErrors('userEmlAddr')}"
+							th:errors="*{userEmlAddr}" class="alert alert-danger"></div>
+					</div>
+					<div class="form-group">
+						<label for="userTelno">전화번호 *</label> <input type="tel"
+							class="form-control" th:field="*{userTelno}"
+							placeholder="-를 제외하고 입력해주세요"
+							th:class="${#fields.hasErrors('userTelno')}? 'form-control fieldError' : 'form-control'">
+						<div  th:if="${#fields.hasErrors('userTelno')}"
+							th:errors="*{userTelno}" class="alert alert-danger"></div>
+					</div>
+					<div class="form-group">
+						<label for="userAddr">주소</label> <input type="text"
+							class="form-control" name="userAddr">
+					</div>
+					<div class="form-group">
+						<label for="department">부서</label> <select class="form-control"
+							name="deptNo">
+							<option th:each="dept : ${deptList}" th:text="${dept.deptNm}"
+								th:value="${dept.deptNo}"></option>
+						</select>
+					</div>
+					<div class="form-group">
+						<label for="hobbies">취미</label><br>
+						<div class="form-check form-check-inline"
+							th:each="hobbyList : ${hobbyList}">
+							<input class="form-check-input" name="hobbyCd" type="checkbox"
+								th:value="${hobbyList.hobbyCd}"> <label
+								class="form-check-label" th:text="${hobbyList.hobbyNm}"></label>
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="approve">관리자 권한</label> <select class="form-control"
+							id="role" name="role">
+							<option value="USER">유저</option>
+							<option value="ADMIN">관리자</option>
+						</select>
+					</div>
+					<button type="submit" class="btn btn-primary" id="btnSubmit">승인요청</button>
+				</form>
+			</div>
 		</div>
-		
-     	<div class="row mb-5 align-items-end  justify-content-center">
-   	       <div class="col-md-6" data-aos="fade-up">
-			<form name="userForm" id="userForm" action="/user/save" method="post">
-			<div class="form-group ">
-				<label for="user_id">ID</label><br>
-				<input type="text" class="form-control " name="userId" id="userId">
-				<button type="button" class="btn btn-primary col-md-12" id="idCheck" >ID중복확인</button>
-			</div>
-			<div class="form-group">
-				<label for="user_nm">사원명</label>
-				<input type="text" class="form-control" name="userNm">
-			</div>
-			<div class="form-group">
-				<label for="user_eml_addr">e-mail</label>
-				<input type="email" class="form-control" name="userEmlAddr">
-			</div>
-			<div class="form-group">
-				<label for="user_telno">전화번호</label>
-				<input type="tel" class="form-control" name="userTelno" placeholder="-를 제외하고 입력해주세요">
-			</div>
-			<div class="form-group">
-				<label for="user_addr">주소</label>
-				<input type="text" class="form-control" name="userAddr">
-			</div>
-			<div class="form-group">
-				<label for="department">부서:</label>
-				<select class="form-control" name="deptNo">
-					<option th:each="dept:${deptList}" th:text="${dept.deptNm}" th:value="${dept.deptNo}" ></option>
-				</select>
-			</div>
-			<div class="form-group">
-				<label for="hobbies">취미:</label><br>
-				<div class="form-check form-check-inline">
-					<th:block th:each="hobbyList:${hobbyList}">
-					<input  class="form-check-input" name="hobbyCd" type="checkbox" th:value="${hobbyList.hobbyCd}">
-					<label class="form-check-label" th:text="${hobbyList.hobbyNm}"></label>
-					</th:block>
-				</div>
-			</div>
-			<button type="submit" class="btn btn-primary" id="btnSubmit" >승인요청</button>
-		</form>
-	  </div>
-   	 </div>
 	</div>
 
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-
+	<script
+		src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+	<script
+		src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+	<script
+		src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>
 <script th:inline="javascript">

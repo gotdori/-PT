@@ -2,9 +2,14 @@ package com.ds.project01.service;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -18,10 +23,12 @@ import com.ds.project01.dto.UserDto;
 
 
 @Service
-public class PT_ApiService {
+public class PT_ApiService implements UserDetailsService {
 	
 	RestTemplate restTemplate = new RestTemplate();
-	String btUrl = "http://34.125.203.235:8081";
+	
+	@Value("${btUrl}")
+	String btUrl;
 	
 	
 	public List<UserEntity> adminList(String searchKeyword){
@@ -36,9 +43,9 @@ public class PT_ApiService {
 		return response.getBody();
 	}
 	
-	public void insert(UserDto dto) {
+	public void insert(UserEntity entity) {
 		String url = btUrl + "/bt/userSave";
-        restTemplate.postForObject(url, dto, UserDto.class);
+        restTemplate.postForObject(url, entity, UserEntity.class);
 	}
 	
 	public void hobbyDataInsert(HobbyDataDto hdDto) {
@@ -47,8 +54,7 @@ public class PT_ApiService {
 	}
 	public void delete(UserDto dto) {
 		String url = btUrl + "/bt/delete";
-		System.out.println(dto);
-		restTemplate.postForObject(url, dto, UserDto.class);
+		restTemplate.postForObject(url, dto, UserEntity.class);
 	}
 	
 	public UserEntity view(String userId) {
@@ -90,4 +96,31 @@ public class PT_ApiService {
 		return response.getBody();
 	}
 	
+	
+
+	@Override
+	public UserDetails loadUserByUsername(String userId) throws UsernameNotFoundException {
+		UserEntity userEntity = view(userId);
+		
+		if (userEntity == null) {
+			throw new UsernameNotFoundException(userId);
+		}
+		
+//		String rawPassword = "12345678"; // 입력된 평문 비밀번호
+//
+//	    PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+//	    boolean matches = passwordEncoder.matches(rawPassword, userEntity.getUserPw());
+//
+//		if (matches) {
+//			System.err.println("똑같다");
+//		}else {
+//			System.err.println("다르다");
+//		}
+		return User.builder()
+				.username(userEntity.getUserId())
+				.password(userEntity.getUserPw())
+				.roles(userEntity.getRole().toString())
+				.build();
+	}
+
 }

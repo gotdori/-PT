@@ -8,6 +8,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
+
+import com.ds.project01.constant.Role;
 import com.ds.project01.dto.UserDto;
 
 import lombok.Getter;
@@ -46,7 +49,7 @@ public class UserEntity {
 	private DeptEntity deptEntity;
 	
 	
-	public static UserEntity toUserEntity(UserDto dto) {
+	public static UserEntity toUserEntity(UserDto dto, PasswordEncoder passwordEncoder) {
 		UserEntity entity = new UserEntity();
 		
 		DeptEntity deptEntity = new DeptEntity();
@@ -59,6 +62,7 @@ public class UserEntity {
 		entity.setUserEmlAddr(dto.getUserEmlAddr());
 		entity.setUserTelno(dto.getUserTelno());
 		entity.setUserAprvYn(dto.getUserAprvYn());
+		entity.setRole(Role.USER);
 		return entity;
 	}
 	

@@ -14,7 +14,7 @@
 		<!-- 검색 바 -->
 		<div class="row">
 			<div class="col-md-6 offset-md-3 mt-3">
-				<form action="/admin/list" method="get">
+				<form action="/admin" method="get">
 					<div class="input-group">
 						<input type="text" class="form-control" name="searchKeyword" placeholder="이름을 입력하세요">
 						<button class="btn btn-primary" type="submit" >검색</button>
@@ -58,6 +58,10 @@
 				<input type="text" class="form-control" id="userId" name="userId" readonly>
 			</div>
 			<div class="form-group">
+				<label for="user_pw">PW</label>
+				<input type="password" class="form-control" id="userPw" name="userPw">
+			</div>
+			<div class="form-group">
 				<label for="user_nm">사원명</label>
 				<input type="text" class="form-control" id="userNm" name="userNm">
 			</div>
@@ -75,7 +79,7 @@
 				<h3 th:text="${getUserDeptNo}"></h3>
 			</div>
 			<div class="form-group">
-				<label for="department">부서:</label>
+				<label for="department">부서</label>
 				<select class="form-control" id="deptNo" name="deptNo">
 					<th:block th:each="dept:${deptList}">
 					<option th:text="${dept.deptNm}" th:value="${dept.deptNo}" 
@@ -84,7 +88,7 @@
 				</select>
 			</div>
 			<div class="form-group">
-				<label for="hobbies">취미:</label><br>
+				<label for="hobbies">취미</label><br>
 				<input type="hidden" id="userHobbyData">
 				<div class="form-check form-check-inline">
 					<th:block th:each="hobbyList,hobby:${hobbyList}">
@@ -96,10 +100,17 @@
 				</div>
 			</div>
 			<div class="form-group">
-				<label for="approve">승인여부 :</label>
+				<label for="approve">승인여부 </label>
 				<select class="form-control" id="userAprvYn" name="userAprvYn">
 					<option value="n">승인대기</option>
 					<option value="y">승인</option>
+				</select>
+			</div>
+			<div class="form-group">
+				<label for="approve">관리자 권한</label>
+				<select class="form-control" id="role" name="role">
+					<option value="USER">유저</option>
+					<option value="ADMIN">관리자</option>
 				</select>
 			</div>
 			<div class="d-flex justify-content-end">
@@ -136,6 +147,7 @@ function getView(id){
 		$('#userAddr').attr("value",res.getUserAddr);
 		$("#deptNo").val(res.getUserDeptNo);
 		$("#userAprvYn").val(res.getUserAprvYn);
+		$("#role").val(res.getRole);
 		
 		//취미
 		$('.form-check-input').each(function() {
@@ -161,8 +173,8 @@ function getView(id){
 $("#btnDelete").click(()=>{
 	let formData=$("#userForm").serialize();
 	$.ajax({
-		url:"/admin/delete",
-		type:"POST",
+		url:"/admin",
+		type:"DELETE",
 		data:formData,
 		dataType:"json"
 	})
@@ -171,8 +183,8 @@ $("#btnDelete").click(()=>{
 $("#btnUpdate").click(()=>{
 	let formData=$("#userForm").serialize();
 	$.ajax({
-		url:"/user/save",
-		type:"POST",
+		url:"/user",
+		type:"PUT",
 		data:formData,
 		dataType:"json"
 	})
