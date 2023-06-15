@@ -62,7 +62,7 @@ public class PT_ApiController {
 
 			service.insert(entity);
 			service.hobbyDataInsert(hdDto);
-			return "redirect:/user";
+			return "redirect:/user/success";
 			
 	}
 	
@@ -72,7 +72,7 @@ public class PT_ApiController {
 			UserEntity entity = UserEntity.toUserEntity(userDto, passwordEncoder);
 			service.insert(entity);
 			service.hobbyDataInsert(hdDto);
-			return "redirect:/user/success";
+			return "redirect:/user";
 	}
 	
 	@GetMapping("/user/success")
