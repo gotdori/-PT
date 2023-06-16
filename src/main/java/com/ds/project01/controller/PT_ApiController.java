@@ -11,6 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -41,10 +42,10 @@ public class PT_ApiController {
 	}
 	
 	@ResponseBody
-	@GetMapping("/user/idcheck")
-	HashMap<String, Object> idCheck(UserDto userDto){
+	@GetMapping("/user/idcheck/{userId}")
+	HashMap<String, Object> idCheck(@PathVariable("userId") String userId){
 		HashMap<String, Object> map = new HashMap<>();
-		boolean result = service.idCheck(userDto.getUserId());
+		boolean result = service.idCheck(userId);
 		map.put("result",result);
 		
 		return map;
@@ -67,7 +68,7 @@ public class PT_ApiController {
 	}
 	
 	
-	@PutMapping("/user")
+	@PutMapping("/admin")
 	public String pt_update(UserDto userDto, HobbyDataDto hdDto, Model model) {
 			UserEntity entity = UserEntity.toUserEntity(userDto, passwordEncoder);
 			service.insert(entity);
@@ -82,8 +83,8 @@ public class PT_ApiController {
 
 	
 	@GetMapping("/admin")
-	public String admin_list(Model model, String searchKeyword) {
-		model.addAttribute("adminList", service.adminList(searchKeyword));
+	public String admin_list(Model model, String searchName) {
+		model.addAttribute("adminList", service.adminList(searchName));
 		model.addAttribute("deptList", service.deptList());
 		model.addAttribute("hobbyList", service.hobbyList());
 		model.addAttribute("userDto", new UserDto());
@@ -94,7 +95,7 @@ public class PT_ApiController {
 	
 	@ResponseBody
 	@GetMapping("/admin/view")
-	HashMap<String, Object> userView(String userId){ //ajax로 보낸  userID 정보를 userDto에 담아서 받아옴 
+	HashMap<String, Object> userView(String userId){
 		HashMap<String, Object> map = new HashMap<>(); //attribute로 html 태그 안으로 데이터를 넘길 때는 Model, script 태그 안에는 map
 		for (int i = 0; i < service.HobbyDataView(userId).size(); i++) {
 			map.put("userHobbyChoice"+i, service.HobbyDataView(userId).get(i).getHobbyEntity().getHobbyCd()); //각각 여러 취미데이터를 다른 아이디로 저장
@@ -113,8 +114,10 @@ public class PT_ApiController {
 	}
 	
 	
-	@DeleteMapping("/admin")
-	public String user_delete(UserDto dto) {
+	@DeleteMapping("/admin/{userId}")
+	public String user_delete(@PathVariable("userId") String userId) {
+		UserDto dto = new UserDto();
+		dto.setUserId(userId);
 		service.delete(dto);
 		return "redirect:/admin";
 	}

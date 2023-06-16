@@ -118,7 +118,7 @@ $(()=>{
 	$("#idCheck").click(()=>{
 		var userId = $("#userId").val();
 		$.ajax({
-			url:"/user/idcheck",
+			url:"/user/idcheck/"+userId,
 			data:{
 				"userId":userId
 			},

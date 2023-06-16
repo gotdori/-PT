@@ -31,10 +31,10 @@ public class PT_ApiService implements UserDetailsService {
 	String btUrl;
 	
 	
-	public List<UserEntity> adminList(String searchKeyword){
+	public List<UserEntity> adminList(String searchName){
 		String url;
-		if(searchKeyword != null)
-		url = btUrl + "/bt/list?searchKeyword="+searchKeyword;
+		if(searchName != null)
+		url = btUrl + "/bt/list?searchName="+searchName;
 		else
 		url = btUrl + "/bt/list";
 		ResponseEntity<List<UserEntity>> response= restTemplate.exchange(url, HttpMethod.GET, null, 

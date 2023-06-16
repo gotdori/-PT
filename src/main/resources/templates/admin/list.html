@@ -5,6 +5,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<style type="text/css">
+ tr:hover { cursor: pointer; }
+</style>
 </head>
 <body>
 <body>
@@ -16,7 +19,7 @@
 			<div class="col-md-6 offset-md-3 mt-3">
 				<form action="/admin" method="get">
 					<div class="input-group">
-						<input type="text" class="form-control" name="searchKeyword" placeholder="이름을 입력하세요">
+						<input type="text" class="form-control" name="searchName" placeholder="이름을 입력하세요">
 						<button class="btn btn-primary" type="submit" >검색</button>
 					</div>
 				</form>
@@ -37,7 +40,7 @@
 						</tr>
 					</thead>
 					<tbody>
-						<tr th:each="adminlist : ${adminList}">
+						<tr style="" th:each="adminlist : ${adminList}">
 							<td th:text="${adminlist.userId}" th:onclick="getView([[${adminlist.userId}]])"></td>
 							<td th:text="${adminlist.userNm}" th:onclick="getView([[${adminlist.userId}]])"></td>
 							<td th:text="${adminlist.deptEntity.deptNm}" th:onclick="getView([[${adminlist.userId}]])"></td>
@@ -171,11 +174,13 @@ function getView(id){
 	
 
 $("#btnDelete").click(()=>{
-	let formData=$("#userForm").serialize();
+	var userId = $("#userId").val();
 	$.ajax({
-		url:"/admin",
+		url:"/admin/"+userId,
 		type:"DELETE",
-		data:formData,
+		data:{
+			"userId":userId
+		},
 		dataType:"json"
 	})
 })
@@ -183,7 +188,7 @@ $("#btnDelete").click(()=>{
 $("#btnUpdate").click(()=>{
 	let formData=$("#userForm").serialize();
 	$.ajax({
-		url:"/user",
+		url:"/admin",
 		type:"PUT",
 		data:formData,
 		dataType:"json"
