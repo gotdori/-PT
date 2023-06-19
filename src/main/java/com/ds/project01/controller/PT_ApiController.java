@@ -11,9 +11,9 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.ds.project01.domain.UserEntity;
@@ -68,7 +68,7 @@ public class PT_ApiController {
 	}
 	
 	
-	@PutMapping("/admin")
+	@PatchMapping("/admin")
 	public String pt_update(UserDto userDto, HobbyDataDto hdDto, Model model) {
 			UserEntity entity = UserEntity.toUserEntity(userDto, passwordEncoder);
 			service.insert(entity);
