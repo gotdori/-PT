@@ -25,7 +25,7 @@ public class SecurityConfig{
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.csrf().disable().cors().disable()
                 .authorizeRequests(request -> request
-                        .antMatchers("/admin/sd").hasRole("ADMIN") // /admin/** 경로에 대한 인증 필요
+                        .antMatchers("/admin").hasRole("ADMIN") // /admin/** 경로에 대한 인증 필요
                         .anyRequest().permitAll() // 그 외의 요청은 모두 허용
                 )
                 .formLogin(login -> login
