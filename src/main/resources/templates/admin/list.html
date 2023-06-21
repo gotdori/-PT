@@ -189,7 +189,7 @@ $("#btnUpdate").click(()=>{
 	let formData=$("#userForm").serialize();
 	$.ajax({
 		url:"/admin",
-		type:"PUT",
+		type:"PATCH",
 		data:formData,
 		dataType:"json"
 	})
