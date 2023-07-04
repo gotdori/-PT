@@ -59,7 +59,9 @@ public class PT_ApiController {
 			model.addAttribute("hobbyList", service.hobbyList());
 			return "user/write";
             }
-			UserEntity entity = UserEntity.toUserEntity(userDto, passwordEncoder);
+			UserEntity entity = UserEntity.toUserEntity(userDto);
+			String UserPw = passwordEncoder.encode(userDto.getUserPw());
+			entity.setUserPw(UserPw);
 
 			service.insert(entity);
 			service.hobbyDataInsert(hdDto);
@@ -70,7 +72,16 @@ public class PT_ApiController {
 	
 	@PatchMapping("/admin")
 	public String pt_update(UserDto userDto, HobbyDataDto hdDto, Model model) {
-			UserEntity entity = UserEntity.toUserEntity(userDto, passwordEncoder);
+			UserEntity entity = UserEntity.toUserEntity(userDto);
+			
+			UserEntity tempEntity = service.view(userDto.getUserId());
+			System.out.println(tempEntity);
+			if (!tempEntity.getUserPw().equals(userDto.getUserPw())) {
+				String UserPw = passwordEncoder.encode(userDto.getUserPw());
+				entity.setUserPw(UserPw);
+			}else {
+				entity.setUserPw(userDto.getUserPw());
+			}
 			service.insert(entity);
 			service.hobbyDataInsert(hdDto);
 			return "redirect:/user";
@@ -103,6 +114,7 @@ public class PT_ApiController {
 		UserEntity entity = new UserEntity();
 		entity = service.view(userId);
 		map.put("getUerId",entity.getUserId());
+		map.put("getUerPw",entity.getUserPw());
 		map.put("getUserNm",entity.getUserNm());
 		map.put("getUserEmlAddr",entity.getUserEmlAddr());
 		map.put("getUserTelno",entity.getUserTelno());

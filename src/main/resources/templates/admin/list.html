@@ -143,6 +143,7 @@ function getView(id){
 	})
 	.done((res)=>{
 		$('#userId').attr("value",res.getUerId);
+		$('#userPw').attr("value",res.getUerPw);
 		$('#userNm').attr("value",res.getUserNm);
 		$('#userEmlAddr').attr("value",res.getUserEmlAddr);
 		$('#userAddr').attr("value",res.getUerId);
